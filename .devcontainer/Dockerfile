@@ -15,9 +15,10 @@ RUN case $(uname -m) in \
 esac; \
 export DOWNLOAD_URL="https://awscli.amazonaws.com/awscli-exe-linux-${architecture}.zip"; \
 echo AWS CLI:  ${DOWNLOAD_URL}; \
-curl ${DOWNLOAD_URL} -o "awscliv2.zip"
-RUN unzip awscliv2.zip
-RUN ./aws/install
+curl ${DOWNLOAD_URL} -o "awscliv2.zip"; \
+unzip awscliv2.zip; \
+./aws/install; \
+rm /tmp/awscliv2.zip && rm -rf /tmp/aws
 
 # Install kubectl
 RUN case $(uname -m) in \
@@ -37,8 +38,7 @@ RUN chmod a+r /etc/bash_completion.d/kubectl
 RUN apt install -y gnupg software-properties-common wget
 RUN wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | tee /usr/share/keyrings/hashicorp-archive-keyring.gpg
 RUN echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list
-RUN apt update
-RUN apt install terraform -y
+RUN apt update && apt install terraform -y
 
 # EKS Blueprints for Terraform
 RUN apt install -y jq gettext bash-completion moreutils
