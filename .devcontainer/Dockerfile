@@ -28,11 +28,12 @@ RUN case $(uname -m) in \
 esac; \
 export DOWNLOAD_URL="https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/${architecture}/kubectl"; \
 curl -LO ${DOWNLOAD_URL}
-RUN install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-RUN kubectl version --client
-RUN mkdir /etc/bash_completion.d
-RUN kubectl completion bash | tee /etc/bash_completion.d/kubectl > /dev/null
-RUN chmod a+r /etc/bash_completion.d/kubectl
+RUN install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl; \
+kubectl version --client
+RUN mkdir /etc/bash_completion.d; \
+kubectl completion bash | tee /etc/bash_completion.d/kubectl > /dev/null; \
+chmod a+r /etc/bash_completion.d/kubectl; \
+rm /tmp/kubectl
 
 # Install terraform cli
 RUN apt install -y gnupg software-properties-common wget
