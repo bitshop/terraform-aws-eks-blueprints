@@ -3,6 +3,12 @@ WORKDIR /tmp
 # We could consolidate these and improve provisioning performance
 #   however for clarity if others try to find install commands I wrote distinct steps
 
+# non root user info (created at end)
+
+ARG USERNAME=devuser
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+
 # Need to apt update and upgrade anything not up to date in base image
 RUN apt update && apt upgrade -y
 
@@ -49,3 +55,21 @@ RUN apt install git -y
 
 # Make sure all is up to date
 RUN apt update && apt upgrade -y
+
+# Create the user
+RUN groupadd --gid $USER_GID $USERNAME \
+    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
+    #
+    # [Optional] Add sudo support. Omit if you don't need to install software after connecting.
+    && apt-get update \
+    && apt-get install -y sudo \
+    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+    && chmod 0440 /etc/sudoers.d/$USERNAME
+
+# Change the UID/GID to match vscode user
+RUN groupmod --gid $USER_GID $USERNAME \
+    && usermod --uid $USER_UID --gid $USER_GID $USERNAME \
+    && chown -R $USER_UID:$USER_GID /home/$USERNAME
+
+# [Optional] Set the default user. Omit if you want to keep the default as root.
+USER $USERNAME
