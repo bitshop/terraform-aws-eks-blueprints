@@ -10,7 +10,7 @@ First, you must ensure that you have installed the following tools:
 2. [kubectl](https://Kubernetes.io/docs/tasks/tools/)
 3. [terraform](https://learn.hashicorp.com/tutorials/terraform/install-cli)
 
-* Dev Container is available - Visual Studio Code "Dev Containers Plugin" will offer to reopen folder in Dev Container which will install the prerequisites for you in an isolated container. 
+* Dev Container is available - Visual Studio Code "Dev Containers Plugin" will offer to reopen folder in Dev Container which will install the prerequisites for you in an isolated container.
 
 ## Examples
 
