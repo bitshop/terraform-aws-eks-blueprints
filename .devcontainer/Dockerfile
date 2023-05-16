@@ -50,8 +50,9 @@ RUN apt update && apt install terraform -y
 # EKS Blueprints for Terraform
 RUN apt install -y jq gettext bash-completion moreutils
 
-# Useful
-RUN apt install git -y
+# Useful (pre-commit is required for PRs)
+RUN apt install git python3-pip -y
+RUN pip3 install pre-commit
 
 # Make sure all is up to date
 RUN apt update && apt upgrade -y
@@ -73,3 +74,4 @@ RUN groupmod --gid $USER_GID $USERNAME \
 
 # [Optional] Set the default user. Omit if you want to keep the default as root.
 USER $USERNAME
+SHELL ["/usr/bin/bash"]
