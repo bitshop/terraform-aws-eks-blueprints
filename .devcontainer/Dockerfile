@@ -9,11 +9,12 @@ RUN apt update && apt upgrade -y
 # Install AWS CLI
 RUN apt install curl zip -y
 RUN case $(uname -m) in \
-  x86_64) architecture="amd64" ;; \
+  x86_64) architecture="x86_64" ;; \
   aarch64)    architecture="aarch64" ;; \
   *)      exit 1;; \
 esac; \
 export DOWNLOAD_URL="https://awscli.amazonaws.com/awscli-exe-linux-${architecture}.zip"; \
+echo AWS CLI:  ${DOWNLOAD_URL}; \
 curl ${DOWNLOAD_URL} -o "awscliv2.zip"
 RUN unzip awscliv2.zip
 RUN ./aws/install
@@ -28,6 +29,7 @@ export DOWNLOAD_URL="https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/re
 curl -LO ${DOWNLOAD_URL}
 RUN install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 RUN kubectl version --client
+RUN mkdir /etc/bash_completion.d
 RUN kubectl completion bash | tee /etc/bash_completion.d/kubectl > /dev/null
 RUN chmod a+r /etc/bash_completion.d/kubectl
 
