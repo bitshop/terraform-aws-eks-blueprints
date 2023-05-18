@@ -104,20 +104,26 @@ module "eks_blueprints_addons" {
         value = bcrypt_hash.argo.id
       }
     ]
+    set = [
+      {
+        name  = "server.service.type"
+        value = "LoadBalancer"
+      }
+    ]
   }
 
   argocd_manage_add_ons = true # Indicates that ArgoCD is responsible for managing/deploying add-ons
   argocd_applications = {
     addons = {
       path               = "chart"
-      repo_url           = "https://github.com/aws-samples/eks-blueprints-add-ons.git"
+      repo_url           = "https://github.com/bitshop/eks-blueprints-add-ons.git"
       add_on_application = true
     }
-    workloads = {
-      path               = "envs/dev"
-      repo_url           = "https://github.com/aws-samples/eks-blueprints-workloads.git"
-      add_on_application = false
-    }
+    # workloads = {
+    #   path               = "envs/dev"
+    #   repo_url           = "https://github.com/bitshop/eks-blueprints-workloads.git"
+    #   add_on_application = false
+    # }
   }
 
   # Add-ons
@@ -205,3 +211,4 @@ module "vpc_cni_irsa" {
 
   tags = local.tags
 }
+                                                
